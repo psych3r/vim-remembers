@@ -1,0 +1,65 @@
+*remembers.txt*  Automatically keeps track of unnamed buffers
+
+Author:  Abdalrahman Ali <abdalrahman.mursi@gmail.com>
+Repo:    https://github.com/abdalrahman-ali/vim-remembers
+
+=============================================================================
+INTRODUCTION                                                 *remembers-intro*
+
+vim-remembers is a simple plugin that automatically saves unnamed buffers on
+|VimLeavePre|, creates a session file on |VimLeave| and reloads the same session 
+on |VimEnter|.                  
+                                -- unnamed buffers created by |enew|, |tabnew| --
+
+It was inspired by the behavior of some text editors like Notepad++ where
+you can create and edit unnamed buffers, close the editor and open it again
+with all your buffers intact as if you saved them. However, vim-remembers 
+saves the buffers and creates a session file to load them again.
+
+=============================================================================
+FEATURES                                                  *remembers-features*
+
+Unnamed buffers are written in `g:remembers_tmp_dir`.
+file name format: >
+    g:remembers_tmp_prefix + timestamp + _n
+where `n` is a number starting from `1` and increments for every unnamed buffer
+in the |:buffers| list.  e.g.  tmp_20201114114659_1
+
+On |VimLeavePre|, if vim was called with no file arguments (|argc|) or
+`g:remembers_always_create` is set to `1`, save a session file called 
+`g:remembers_session_fname` in `g:remembers_session_dir`.
+
+On |VimEnter|, if vim was called with no file arguments (|argc|) or
+`g:remembers_always_reload` is set to `1`,  load the session called 
+`g:remembers_session_fname` in `g:remembers_session_dir`.
+
+Combinations of `g:remembers_always_create` and `g:remembers_always_reload` values 
+control how the plugin behaves. They both default to `0`.
+
+=============================================================================
+CONFIGURATION                                        *remembers-configuration*
+
+This is a list of all the configuration variables (shown with their default
+values):
+
+* only create a session file if vim is called with no file arguments.
+  when set to `1` it always creates a session. >
+    let g:remembers_always_create   = 0
+<
+* only reload a session if vim is called with no file arguments.
+  when set to `1` it always reloads. >
+    let g:remembers_always_reload   = 0
+<
+* prefix used to write unnamed files e.g. tmp_%timestamp%_1 >
+    let g:remembers_tmp_prefix      = 'tmp_'
+<
+* unnamed buffers are saved here >
+    let g:remembers_tmp_dir         = '~/.vim/.tmp_files'
+
+* session files are saved here >
+    let g:remembers_session_dir     = '~/.vim/.tmp_files'
+<
+* session file name -- notice it's hidden by default >
+    let g:remembers_session_fname   = '.remembers_session.vim'
+
+vim:tw=78:et:ft=help:norl:

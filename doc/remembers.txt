@@ -21,9 +21,12 @@ FEATURES                                                  *remembers-features*
 
 Unnamed buffers are written in `g:remembers_tmp_dir`.
 file name format: >
-    g:remembers_tmp_prefix + timestamp + _n
+    g:remembers_tmp_prefix + timestamp + _n + g:remembers_tmp_suffix 
 where `n` is a number starting from `1` and increments for every unnamed buffer
-in the |:buffers| list.  e.g.  tmp_20201114114659_1
+in the |:buffers| list.  >
+    let g:remembers_tmp_prefix = "tmp_" 
+    let g:remembers_tmp_suffix = ".txt" 
+file name:  tmp_20201114114659_1.txt 
 
 On |VimLeavePre|, if vim was called with no file arguments (|argc|) or
 `g:remembers_always_create` is set to `1`, save a session file called 

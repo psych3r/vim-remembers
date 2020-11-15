@@ -53,6 +53,9 @@ values):
 * prefix used to write unnamed files e.g. tmp_%timestamp%_1 >
     let g:remembers_tmp_prefix      = 'tmp_'
 <
+* suffix used to write unnamed files. used to set file extensions e.g. tmp_%timestamp%_1{suffix} >
+    let g:remembers_tmp_suffix      = ''
+<
 * unnamed buffers are saved here >
     let g:remembers_tmp_dir         = '~/.vim/.tmp_files'
 

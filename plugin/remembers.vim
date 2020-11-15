@@ -21,6 +21,10 @@ if !exists('g:remembers_tmp_prefix')
     let g:remembers_tmp_prefix='tmp_'
 endif
 
+if !exists('g:remembers_tmp_suffix')
+    let g:remembers_tmp_suffix=''
+endif
+
 if !exists('g:remembers_tmp_dir')
     let g:remembers_tmp_dir='~/.vim/.tmp_files'
 endif
@@ -33,7 +37,7 @@ if !exists('g:remembers_session_fname')
     let g:remembers_session_fname='.remembers_session.vim'
 endif
 
-function! s:Remembers_save_tmps(dir,prefix)
+function! s:Remembers_save_tmps(dir,prefix,suffix)
     let bufcount = bufnr("$")
     let currbufnr = 1
     let counter = 0
@@ -47,7 +51,7 @@ function! s:Remembers_save_tmps(dir,prefix)
                 if !isdirectory(dir_path)
                     call mkdir(dir_path, "p")
                 endif
-                let fname = a:prefix . strftime('%Y%m%d%I%M%S') . '_' .  string(counter)
+                let fname = a:prefix . strftime('%Y%m%d%I%M%S') . '_' .  string(counter) . a:suffix
                 execute ":w! " . dir_path . fname
             endif
         endif
@@ -89,7 +93,7 @@ endfunction
 
 augroup remembersPlugin
     autocmd!
-    autocmd VimLeavePre * call s:Remembers_save_tmps(g:remembers_tmp_dir, g:remembers_tmp_prefix)
+    autocmd VimLeavePre * call s:Remembers_save_tmps(g:remembers_tmp_dir, g:remembers_tmp_prefix, g:remembers_tmp_suffix)
     autocmd VimLeave * call s:Remembers_save_session(g:remembers_session_dir, g:remembers_session_fname)
     autocmd VimEnter * nested call s:Remembers_restore_session(g:remembers_session_dir, g:remembers_session_fname)
 augroup END

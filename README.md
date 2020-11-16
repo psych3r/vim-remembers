@@ -21,6 +21,15 @@ This can be overridden by setting the variables
 
 They both default to `0`.
 
+Choose where to save the unnamed buffers and the session file by setting
+
+    let g:remembers_tmp_dir     = '~/tmp_dir'
+    let g:remembers_session_dir = '/somewhere/in/the/north'
+
+Empty unnamed buffers are saved by default. override this with
+
+    let g:remembers_ignore_empty_buffers = 1
+
 For other options and further explanation `:h remembers`.
 
 ## Installation

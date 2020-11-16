@@ -67,5 +67,8 @@ values):
 <
 * session file name -- notice it's hidden by default >
     let g:remembers_session_fname   = '.remembers_session.vim'
+<
+* save empty unnamed buffers. if set to `1` don't save them. >
+    let g:remembers_ignore_empty_buffers = 0
 
 vim:tw=78:et:ft=help:norl:

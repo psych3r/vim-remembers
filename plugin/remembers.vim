@@ -37,6 +37,10 @@ if !exists('g:remembers_session_fname')
     let g:remembers_session_fname='.remembers_session.vim'
 endif
 
+if !exists('g:remembers_ignore_empty_buffers')
+    let g:remembers_ignore_empty_buffers=0
+endif
+
 function! s:Remembers_save_tmps(dir,prefix,suffix)
     let bufcount = bufnr("$")
     let currbufnr = 1
@@ -45,14 +49,19 @@ function! s:Remembers_save_tmps(dir,prefix,suffix)
     while currbufnr <= bufcount
         if bufexists(currbufnr) && buflisted(currbufnr) == 1
             if bufname(currbufnr) == ''
-                let counter += 1
                 execute ":buffer ". currbufnr
-                let dir_path = substitute(fnamemodify(expand(a:dir), ':p'), '[\/]$', '', '')  . '/'
-                if !isdirectory(dir_path)
-                    call mkdir(dir_path, "p")
+                if line('$') == 1 && getline(1) == '' && g:remembers_ignore_empty_buffers == 1
+                    let currbufnr = currbufnr + 1
+                    continue
+                else
+                    let counter += 1
+                    let dir_path = substitute(fnamemodify(expand(a:dir), ':p'), '[\/]$', '', '')  . '/'
+                    if !isdirectory(dir_path)
+                        call mkdir(dir_path, "p")
+                    endif
+                    let fname = a:prefix . strftime('%Y%m%d%I%M%S') . '_' .  string(counter) . a:suffix
+                    execute ":w! " . dir_path . fname
                 endif
-                let fname = a:prefix . strftime('%Y%m%d%I%M%S') . '_' .  string(counter) . a:suffix
-                execute ":w! " . dir_path . fname
             endif
         endif
         let currbufnr = currbufnr + 1

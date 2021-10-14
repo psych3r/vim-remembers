@@ -78,7 +78,7 @@ fu! s:Remembers_save_session(dir, fname)
         endif
         let session_file = dir_path . a:fname
         try
-            set sessionoptions-=blank sessionoptions-=options sessionoptions+=tabpages
+            set sessionoptions-=blank sessionoptions-=curdir sessionoptions-=sesdir sessionoptions-=options sessionoptions+=tabpages
             execute 'mksession! '. session_file
         catch /^Vim(mksession):E11:/
             return ''

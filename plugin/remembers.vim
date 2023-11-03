@@ -6,6 +6,7 @@ if exists("g:loaded_remembers") || &cp
     finish
 endif
 let g:loaded_remembers = 1
+let s:osname = system("uname -s")
 
 " setting defaults
 
@@ -70,7 +71,7 @@ function! s:Remembers_save_tmps(dir,prefix,suffix)
 endfunction
 
 fu! s:Remembers_save_session(dir, fname)
-    let arg_count = has('win32')? argc() : len(split(system("ps -o command= -p ".getpid()))) - 1
+    let arg_count = has('win32') || s:osname == "Darwin\n" ? argc() : len(split(system("ps -o command= -p ".getpid()))) - 1
     if arg_count <= 0 || g:remembers_always_create == 1
         let sessionoptions = &sessionoptions
         let dir_path = substitute(fnamemodify(expand(a:dir), ':p'), '[\/]$', '', '')  . '/'
@@ -92,7 +93,7 @@ fu! s:Remembers_save_session(dir, fname)
 endfunction
 
 fu! s:Remembers_restore_session(dir, fname)
-    let arg_count = has('win32')? argc() : len(split(system("ps -o command= -p ".getpid()))) - 1
+    let arg_count = has('win32') || s:osname == "Darwin\n" ? argc() : len(split(system("ps -o command= -p ".getpid()))) - 1
     if arg_count <= 0  || g:remembers_always_reload == 1
         let dir_path = substitute(fnamemodify(expand(a:dir), ':p'), '[\/]$', '', '')  . '/'
         let session_file = dir_path . a:fname

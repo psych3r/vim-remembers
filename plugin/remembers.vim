@@ -94,6 +94,9 @@ endfunction
 
 fu! s:Remembers_restore_session(dir, fname)
     let arg_count = has('win32') || s:osname == "Darwin\n" ? argc() : len(split(system("ps -o command= -p ".getpid()))) - 1
+    if has('nvim')
+        let arg_count = arg_count - 1
+    endif
     if arg_count <= 0  || g:remembers_always_reload == 1
         let dir_path = substitute(fnamemodify(expand(a:dir), ':p'), '[\/]$', '', '')  . '/'
         let session_file = dir_path . a:fname

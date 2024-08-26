@@ -36,7 +36,7 @@ For other options and further explanation `:h remembers`.
 
 Using a plugin manager is recommended. [vim-plug](https://github.com/junegunn/vim-plug) is awesome !
 
-    Plug 'abdalrahman-ali/vim-remembers'
+    Plug 'psych3r/vim-remembers'
 
 ## Contributing
 

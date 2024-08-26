@@ -1,7 +1,7 @@
 *remembers.txt*  Automatically keeps track of unnamed buffers
 
 Author:  Abdalrahman Ali <abdalrahman.mursi@gmail.com>
-Repo:    https://github.com/abdalrahman-ali/vim-remembers
+Repo:    https://github.com/psych3r/vim-remembers
 
 =============================================================================
 INTRODUCTION                                                 *remembers-intro*
@@ -21,12 +21,12 @@ FEATURES                                                  *remembers-features*
 
 Unnamed buffers are written in `g:remembers_tmp_dir`.
 file name format: >
-    g:remembers_tmp_prefix + timestamp + _n + g:remembers_tmp_suffix 
-where `n` is a number starting from `1` and increments for every unnamed buffer
-in the |:buffers| list.  >
+    g:remembers_tmp_prefix + n + g:remembers_tmp_suffix 
+where `n` is a counter that starts from `1` and increments for every
+remembered buffer.  >
     let g:remembers_tmp_prefix = "tmp_" 
     let g:remembers_tmp_suffix = ".txt" 
-file name:  tmp_20201114114659_1.txt 
+file name:  tmp_1.txt 
 
 On |VimLeavePre|, if vim was called with no file arguments (|argc|) or
 `g:remembers_always_create` is set to `1`, save a session file called 
@@ -56,7 +56,7 @@ values):
 * prefix used to write unnamed files e.g. tmp_%timestamp%_1 >
     let g:remembers_tmp_prefix      = 'tmp_'
 <
-* suffix used to write unnamed files. used to set file extensions e.g. tmp_%timestamp%_1{suffix} >
+* suffix used to write unnamed files. used to set file extensions e.g. tmp_1{suffix} >
     let g:remembers_tmp_suffix      = ''
 <
 * unnamed buffers are saved here >

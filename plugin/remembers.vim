@@ -1,6 +1,6 @@
 " remembers.vim - Continuously updated session files
 " Maintainer:     Abdalrahman Mursi <abdalrahman.mursi@gmail.com>
-" Version:        1.0
+" Version:        1.1
 
 if exists("g:loaded_remembers") || &cp
     finish
@@ -42,10 +42,13 @@ if !exists('g:remembers_ignore_empty_buffers')
     let g:remembers_ignore_empty_buffers=0
 endif
 
+if !exists('g:Remembers_file_counter')
+    let g:Remembers_file_counter = 1
+endif
+
 function! s:Remembers_save_tmps(dir,prefix,suffix)
     let bufcount = bufnr("$")
     let currbufnr = 1
-    let counter = 0
     let original_place = bufnr('%')
     while currbufnr <= bufcount
         if bufexists(currbufnr) && buflisted(currbufnr) == 1
@@ -55,13 +58,13 @@ function! s:Remembers_save_tmps(dir,prefix,suffix)
                     let currbufnr = currbufnr + 1
                     continue
                 else
-                    let counter += 1
                     let dir_path = substitute(fnamemodify(expand(a:dir), ':p'), '[\/]$', '', '')  . '/'
                     if !isdirectory(dir_path)
                         call mkdir(dir_path, "p")
                     endif
-                    let fname = a:prefix . strftime('%Y%m%d%I%M%S') . '_' .  string(counter) . a:suffix
+                    let fname = a:prefix . string(g:Remembers_file_counter) . a:suffix
                     execute ":w! " . dir_path . fname
+                    let g:Remembers_file_counter += 1
                 endif
             endif
         endif
@@ -70,9 +73,16 @@ function! s:Remembers_save_tmps(dir,prefix,suffix)
     execute ":buffer ". original_place 
 endfunction
 
-fu! s:Remembers_save_session(dir, fname)
+fu! s:get_args_count()
     let arg_count = has('win32') || s:osname == "Darwin\n" ? argc() : len(split(system("ps -o command= -p ".getpid()))) - 1
-    if arg_count <= 0 || g:remembers_always_create == 1
+    if has('nvim')
+        let arg_count = arg_count - 1
+    endif
+    return arg_count
+endfunction
+
+fu! s:Remembers_save_session(dir, fname)
+    if s:get_args_count() <= 0 || g:remembers_always_create == 1
         let sessionoptions = &sessionoptions
         let dir_path = substitute(fnamemodify(expand(a:dir), ':p'), '[\/]$', '', '')  . '/'
         if !isdirectory(dir_path)
@@ -80,7 +90,8 @@ fu! s:Remembers_save_session(dir, fname)
         endif
         let session_file = dir_path . a:fname
         try
-            set sessionoptions-=blank sessionoptions-=curdir sessionoptions-=sesdir sessionoptions-=options sessionoptions+=tabpages
+            set sessionoptions-=blank sessionoptions-=curdir sessionoptions-=sesdir sessionoptions-=options 
+            set sessionoptions+=tabpages sessionoptions+=globals
             execute 'mksession! '. session_file
         catch /^Vim(mksession):E11:/
             return ''
@@ -93,11 +104,7 @@ fu! s:Remembers_save_session(dir, fname)
 endfunction
 
 fu! s:Remembers_restore_session(dir, fname)
-    let arg_count = has('win32') || s:osname == "Darwin\n" ? argc() : len(split(system("ps -o command= -p ".getpid()))) - 1
-    if has('nvim')
-        let arg_count = arg_count - 1
-    endif
-    if arg_count <= 0  || g:remembers_always_reload == 1
+    if s:get_args_count() <= 0  || g:remembers_always_reload == 1
         let dir_path = substitute(fnamemodify(expand(a:dir), ':p'), '[\/]$', '', '')  . '/'
         let session_file = dir_path . a:fname
         if filereadable(session_file)

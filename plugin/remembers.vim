@@ -75,9 +75,11 @@ endfunction
 
 fu! s:get_args_count()
     let arg_count = has('win32') || s:osname == "Darwin\n" ? argc() : len(split(system("ps -o command= -p ".getpid()))) - 1
-    if has('nvim')
-        let arg_count = arg_count - 1
-    endif
+    " argc() now reports the correct number of arguments with nvim v0.10
+    " if has('nvim')
+        " let arg_count = arg_count - 1
+    " endif
+    " echo "Argument Count: " . arg_count
     return arg_count
 endfunction
 

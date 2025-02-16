@@ -110,9 +110,13 @@ fu! s:Remembers_restore_session(dir, fname)
     if s:get_args_count() <= 0  || g:remembers_always_reload == 1
         let dir_path = substitute(fnamemodify(expand(a:dir), ':p'), '[\/]$', '', '')  . '/'
         let session_file = dir_path . a:fname
+        let sessionoptions = &sessionoptions
+        set sessionoptions-=blank sessionoptions-=curdir sessionoptions-=sesdir sessionoptions-=options 
+        set sessionoptions+=tabpages sessionoptions+=globals
         if filereadable(session_file)
             execute 'so ' . session_file
         endif
+        let &sessionoptions = sessionoptions
     endif
 endfunction
 

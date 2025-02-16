@@ -74,7 +74,8 @@ function! s:Remembers_save_tmps(dir,prefix,suffix)
 endfunction
 
 fu! s:get_args_count()
-    let arg_count = has('win32') || s:osname == "Darwin\n" ? argc() : len(split(system("ps -o command= -p ".getpid()))) - 1
+    " let arg_count = has('win32') || s:osname == "Darwin\n" ? argc() : len(split(system("ps -o command= -p ".getpid()))) - 1
+    let arg_count = argc() 
     " argc() now reports the correct number of arguments with nvim v0.10
     " if has('nvim')
         " let arg_count = arg_count - 1
